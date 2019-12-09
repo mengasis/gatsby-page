@@ -1,24 +1,40 @@
-import { Link } from 'gatsby'
+import { graphql, Link, useStaticQuery } from 'gatsby'
 import React from 'react'
+import styled from 'styled-components'
 
-interface Props {
-  siteTitle?: string
-}
-const Header = ({ siteTitle = '' }: Props) => (
-  <header
-    style={{
-      background: `rebeccapurple`,
-      marginBottom: `1.45rem`,
-    }}
-  >
-    <div
-      style={{
-        margin: `0 auto`,
-        maxWidth: 960,
-        padding: `1.45rem 1.0875rem`,
-      }}
-    >
-      <h1 style={{ margin: 0 }}>
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100px;
+  background: #369068;
+`
+
+const Title = styled.h1`
+  margin: 0;
+`
+
+const Subtitle = styled.span`
+  font-size: 16px;
+  color: aliceblue;
+`
+
+const Header = () => {
+  const data = useStaticQuery(graphql`
+    query SiteTitleQuery {
+      site {
+        siteMetadata {
+          title
+          description
+        }
+      }
+    }
+  `)
+
+  return (
+    <Container>
+      <Title>
         <Link
           to="/"
           style={{
@@ -26,11 +42,13 @@ const Header = ({ siteTitle = '' }: Props) => (
             textDecoration: `none`,
           }}
         >
-          {siteTitle}
+          {data.site.siteMetadata.title}
         </Link>
-      </h1>
-    </div>
-  </header>
-)
+      </Title>
+
+      <Subtitle>{data.site.siteMetadata.description}</Subtitle>
+    </Container>
+  )
+}
 
 export default Header
