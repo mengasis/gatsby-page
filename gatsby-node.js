@@ -1,7 +1,36 @@
-/**
- * Implement Gatsby's Node APIs in this file.
- *
- * See: https://www.gatsbyjs.org/docs/node-apis/
- */
+/* eslint-disable @typescript-eslint/no-var-requires */
+const path = require('path')
 
-// You can delete this file if you're not using it
+const query = `
+query {
+  allMarkdownRemark {
+    edges {
+      node {
+        frontmatter {
+          path
+        }
+      }
+    }
+  }
+ }`
+
+exports.createPages = async ({ graphql, actions }) => {
+  const { createPage } = actions
+  const Post = path.resolve('src/templates/Post.tsx')
+
+  const {
+    data: { allMarkdownRemark },
+  } = await graphql(query)
+
+  return allMarkdownRemark.edges.forEach(({ node }) => {
+    const { path: pathSlug } = node.frontmatter
+
+    createPage({
+      path: pathSlug,
+      component: Post,
+      context: {
+        pathSlug,
+      },
+    })
+  })
+}

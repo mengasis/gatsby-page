@@ -11,6 +11,7 @@ import styled from 'styled-components'
 import Header from './header'
 
 const Body = styled.div`
+  width: 100%;
   height: 100vh;
   margin: 0 auto;
   max-width: 960px;
