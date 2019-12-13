@@ -1,17 +1,29 @@
 import React from 'react'
-import { graphql } from 'gatsby'
+import { graphql, Link } from 'gatsby'
+import styled from 'styled-components'
 
-const Template = (props: any) => {
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+const Template = ({ data, pageContext: { prev, next } }: any) => {
   const {
     html,
     frontmatter: { title },
-  } = props.data.markdownRemark
+  } = data.markdownRemark
 
   return (
-    <div>
+    <Wrapper>
       <h1>{title}</h1>
       <div dangerouslySetInnerHTML={{ __html: html }} />
-    </div>
+      {prev && (
+        <Link to={prev.frontmatter.path}>{`<- ${prev.frontmatter.title}`}</Link>
+      )}
+      {next && (
+        <Link to={next.frontmatter.path}>{`${next.frontmatter.title} ->`}</Link>
+      )}
+    </Wrapper>
   )
 }
 
